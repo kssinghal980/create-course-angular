@@ -1,0 +1,59 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <link href="index.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <div ng-app="myApp" ng-controller="createCourseCtrl">
+
+            <div class="left-pane inline">
+                <div class="filters">
+                    <select ng-model="subject" ng-options="subject for subject in subjects"></select>
+
+                    <select ng-model="grade" ng-options="grade for grade in grades"></select>
+                </div>
+                <ul>
+                    <li ng-repeat="d in data | orderBy:'subject' | filter:grade | filter:subject" class="icon-{{d.subject}}" draggable title="{{d.title}}">
+                        <div class="pull-left">
+                            <img class="subject-image" src="{{d.subject}}.jpg" />
+                        </div>
+                        <div class="pull-left">
+                            <div>{{d.title}}</div>
+                            <div class="subject-name">{{d.subject}}, Grade {{d.grade}}</div>
+                            <div class="details">
+                                <div ng-if="d.noOfVideos" class="inline"><span class="footer-text">{{d.noOfVideos}} </span><i class="icon-video icon"></i> </div>
+                                <div ng-if="d.noOfDocuments" class="inline"><span class="footer-text">{{d.noOfDocuments}} </span><i class="icon-document icon"></i> </div>
+                                <div ng-if="d.noOfQuestions" class="inline"><span class="footer-text">{{d.noOfQuestions}} </span><i class="icon-question icon"></i> </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="right-pane inline">
+                <h3 class="course-heading">Create a New Course</h3>
+                <input type="text" placeholder="Enter course name" ng-keydown="createCourse($event)" ng-hide="courseCreated" ng-model="courseTitle"/>
+                <h4 ng-hide="!courseCreated">{{courseTitle}}</h4>
+                <h3 class="topic-heading">Topics</h3>
+                <div ng-repeat="course in courses track by $index" class="course-container" ng-init="parentIndex = $index">
+                    <div class="topic-wrapper">
+                        <div class="inline topic-index">{{course}}</div>
+                        <input type="text" placeholder="Topic {{course}}" ng-keydown="createTopic($event,course)" ng-hide="topicCreated[course]" ng-model="topicTitle"/>
+                        <span ng-hide="!topicCreated[course]">{{topicTitle}}</span>
+                    </div>
+                    <div class="drop-area" ng-hide="dragEnd[lessons[parentIndex]]" dropable lessons="{{lessons[parentIndex]}}">Add lessons</div>
+                    <div class="topic-name" ng-repeat="topic in topics[lessons[parentIndex]] track by $index">
+                        {{$index +1}}. {{topic}}
+                        <div class="remove-topic">&times;</div>
+
+                    </div>
+                    <div class="drop-area-final" dropable ng-show="dragEnd[lessons[parentIndex]]" lessons="{{lessons[parentIndex]}}">Drag to add more</div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <script type="text/javascript" src="angular.min.js"></script>
+        <script src="index.js" type="text/javascript"></script>
+    </body>
+</html>
