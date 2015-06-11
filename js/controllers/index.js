@@ -16,8 +16,6 @@ function createCourseCtrl($scope){
         {id:11, title: "Physics", subject: "science", grade: 2, noOfVideos: 2, noOfDocuments: 4, noOfQuestions: 5},
         {id:12, title: "Ecology", subject: "science", grade: 3, noOfVideos: 0, noOfDocuments: 3, noOfQuestions: 6}
     ];
-
-
     $scope.grades = [];
     $scope.subjects = [];
     $scope.dragEnd = {};
@@ -26,8 +24,10 @@ function createCourseCtrl($scope){
         "second":[],
         "third":[]
     };
-    $scope.topicCreated = {};
+    $scope.courses = [1,2,3];
+    $scope.lessons = ["first","second","third"];
 
+    $scope.topicCreated = {};
     angular.forEach($scope.data, function(d){
         if($scope.grades.indexOf(d.grade) < 0){
             $scope.grades.push(d.grade);
@@ -47,57 +47,14 @@ function createCourseCtrl($scope){
             $scope.topicCreated[index] = true;
     }
 
-
-//    $scope.grade = "All";
-//    $scope.subject = "All";
-    $scope.courses = [1,2,3];
-    $scope.lessons = ["first","second","third"];
-
-
-
     $scope.$on("DRAG_ENDS", function(ev, data){
         $scope.$apply(function(){
             $scope.dragEnd[data.lessons] = true;
-            $scope.topics[data.lessons].push(data.topic);
+            $scope.topics[data.lessons].push({
+                topic:data.topic,
+                subject:data.subject
+            });
         })
     })
 
 }
-
-
-myApp.directive('draggable', function($rootScope) {
-      return function(scope, element, attrs) {
-          // this gives us the native JS object
-          var el = element[0];
-
-          el.draggable = true;
-
-
-          el.addEventListener('dragstart',function(e) {
-            var title = attrs.title;
-            $rootScope.$broadcast("DRAG_START", {title:title})
-
-
-          });
-      }
-  });
-
-  myApp.directive('dropable', function($rootScope){
-    return function(scope,element, attrs){
-        var dropZoneOne = element[0];
-        var title;
-        var lessons = attrs.lessons;
-        scope.$on('DRAG_START', function(ev, data){
-            title = data.title
-        })
-
-        dropZoneOne.addEventListener('dragover', function(e) {
-            e.preventDefault();
-        });
-        dropZoneOne.addEventListener('drop', function(e) {
-            $rootScope.$broadcast("DRAG_ENDS",{lessons:lessons, topic:title});
-            console.log(title)
-        });
-
-  }
-  })
