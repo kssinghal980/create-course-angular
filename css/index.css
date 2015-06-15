@@ -7,16 +7,18 @@
 }
 
 .left-pane{
-    width: 60%;
-    height:100%;
-    border-right: 2px solid #000;
-    float:left;
+     width: 60%;
+     height: 760px;
+     border-right: 2px solid #000;
+     float: left;
+     overflow-y: auto;
 }
 
 .right-pane{
     width:28%;
     background-color:#ddd;
     padding:10px;
+    height:740px;
 }
 
 .filters{
@@ -124,10 +126,22 @@
 
 .topic-details{
     position:relative;
-    bottom:40px;
+    bottom:20px;
 }
 
 .subject-image-small{
     height:50px;
     width:50px;
+}
+
+.remove-course-topic{
+    float:right;
+    cursor:pointer;
+    margin-top: 12px;
+    border: 1px solid #000;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    background-color: #fff;
 }

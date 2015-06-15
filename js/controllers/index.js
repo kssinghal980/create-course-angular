@@ -1,6 +1,6 @@
 var myApp = angular.module("myApp",[]);
 
-function createCourseCtrl($scope){
+function createCourseCtrl($scope, $timeout){
 
     $scope.data=[
         {id:1, title: "Addition and Subtraction", subject: "math", grade: 1, noOfVideos: 2, noOfDocuments: 3, noOfQuestions: 5},
@@ -49,12 +49,32 @@ function createCourseCtrl($scope){
 
     $scope.$on("DRAG_ENDS", function(ev, data){
         $scope.$apply(function(){
-            $scope.dragEnd[data.lessons] = true;
-            $scope.topics[data.lessons].push({
-                topic:data.topic,
-                subject:data.subject
+        var topicExists = false;
+            angular.forEach($scope.topics[data.lessons], function(d){
+                if(d.topic == data.topic){
+                    topicExists = true;
+                    $timeout(function(){
+                        alert('This topic already exists');
+                    },1);
+                    return false;
+                }
             });
+            if(!topicExists){
+                $scope.dragEnd[data.lessons] = true;
+                $scope.topics[data.lessons].push({
+                    topic:data.topic,
+                    subject:data.subject
+                });
+            }
         })
+    })
+
+    $scope.$on("TOPIC_REMOVED", function(ev, data){
+        var lesson = data.lesson;
+        $scope.topics[lesson].splice(data.index, 1);
+        if($scope.topics[lesson].length == 0){
+            delete $scope.dragEnd[lesson];
+        }
     })
 
 }

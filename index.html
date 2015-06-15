@@ -7,11 +7,11 @@
         <div ng-app="myApp" ng-controller="createCourseCtrl">
             <div class="left-pane inline">
                 <div class="filters">
-                    Subject:<select ng-model="subject" ng-options="subject for subject in subjects"></select>
-                    Grades:<select ng-model="grade" ng-options="grade for grade in grades"></select>
+                    Subject:<select ng-model="search.subject" ng-options="subject for subject in subjects"></select>
+                    Grades:<select ng-model="search.grade" ng-options="grade for grade in grades"></select>
                 </div>
                 <ul>
-                    <li ng-repeat="d in data | orderBy:'subject' | filter:grade | filter:subject" class="icon-{{d.subject}}" draggable title="{{d.title}}" subject="{{d.subject}}">
+                    <li ng-repeat="d in data | orderBy:'subject' | filter:search" class="icon-{{d.subject}}" draggable title="{{d.title}}" subject="{{d.subject}}">
                         <div class="pull-left">
                             <img class="subject-image" src="images/{{d.subject}}.jpg" />
                         </div>
@@ -39,8 +39,11 @@
                         <span ng-hide="!topicCreated[course]">{{topicTitle}}</span>
                     </div>
                     <div class="drop-area" ng-hide="dragEnd[lessons[parentIndex]]" dropable lessons="{{lessons[parentIndex]}}">Add lessons</div>
-                    <div class="topic-name" ng-repeat="t in topics[lessons[parentIndex]] track by $index">
-                        <span class="topic-details">{{$index +1}}.</span> <img class="subject-image-small" src="images/{{t.subject}}.jpg" /> <span class="topic-details">{{t.topic}}</span>
+                    <div remove-course>
+                        <div class="topic-name" ng-repeat="t in topics[lessons[parentIndex]] track by $index">
+                            <span class="topic-details">{{$index +1}}.</span> <img class="subject-image-small" src="images/{{t.subject}}.jpg" /> <span class="topic-details">{{t.topic}}</span>
+                            <span class="remove-course-topic" ng-click="removeCourse($index, lessons[parentIndex]);" title="Click to remove topic">&times;</span>
+                        </div>
                     </div>
                     <div class="drop-area-final" dropable ng-show="dragEnd[lessons[parentIndex]]" lessons="{{lessons[parentIndex]}}">Drag to add more</div>
                 </div>
@@ -50,5 +53,6 @@
         <script type="text/javascript" src="js/controllers/index.js"></script>
         <script type="text/javascript" src="js/directives/draggable.js"></script>
         <script type="text/javascript" src="js/directives/droppable.js"></script>
+        <script type="text/javascript" src="js/directives/removeCourse.js"></script>
     </body>
 </html>
